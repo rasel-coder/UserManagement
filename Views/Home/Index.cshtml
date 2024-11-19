@@ -1,0 +1,110 @@
+﻿@model List<UserManagement.Data.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    if (Model != null)
+    {
+        <form method="post" action="/Home/UserAction">
+            <div class="d-flex justify-content-between mt-4 mb-4">
+                <div class="w-75">
+                    <button type="submit" name="action" value="block" class="btn btn-outline-primary"><i class='bx bxs-lock-alt'></i> Block</button>
+                    <button type="submit" name="action" value="unblock" class="btn btn-outline-primary"><i class='bx bxs-lock-open-alt'></i></button>
+                    <button type="submit" name="action" value="delete" class="btn btn-outline-danger"><i class='bx bx-trash'></i></button>
+                </div>
+                <div class="w-25">
+                    <input type="text" placeholder="Filter" class="form-control" />
+                </div>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" class="form-check-input" id="select-all-users" /></th>
+                        <th>Name</th>
+                        <th>Email <i class='bx bx-down-arrow-alt fw-bold' style="color: lightgray;"></i></th>
+                        <th>Last seen</th>
+                        <th>Registration Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        string relativeTime = relativeTime = GetRelativeTime(user.LastLoggedIn);
+                        string GetRelativeTime(DateTime lastSeen)
+                        {
+                            var timeDifference = DateTime.UtcNow - lastSeen;
+                            if (timeDifference.TotalSeconds < 60)
+                                return $"less than a minute ago";
+                            else if (timeDifference.TotalMinutes < 60)
+                                return $"{Math.Floor(timeDifference.TotalMinutes)} minutes ago";
+                            else if (timeDifference.TotalHours < 24)
+                                return $"{Math.Floor(timeDifference.TotalHours)} hours ago";
+                            else if (timeDifference.TotalDays < 30)
+                                return $"{Math.Floor(timeDifference.TotalDays)} days ago";
+                            else if (timeDifference.TotalDays < 365)
+                                return $"{Math.Floor(timeDifference.TotalDays / 30)} months ago";
+                            else
+                                return $"{Math.Floor(timeDifference.TotalDays / 365)} years ago";
+                        }
+
+                        var disabledRow = user.LockoutEnd == null ? "" : "disabled-row";
+                        var lineThrough = user.LockoutEnd == null ? "" : "text-decoration-line-through";
+
+                        <tr class="@disabledRow">
+                            <td><input type="checkbox" class="form-check-input select-users" name="UserIds" value="@user.Id" /></td>
+                            <td>
+                                <p class="row-content @lineThrough">@user.LastName, @user.FirstName</p>
+                                @{
+                                    if (user.CompanyName != null || user.Designation != null)
+                                    {
+                                        <p style="font-weight: 300;">@user.CompanyName, @user.Designation</p>
+                                    }
+                                    else
+                                    {
+                                        <p style="font-weight: 300;">N/A</p>
+                                    }
+                                }
+
+                            </td>
+                            <td>
+                                <p class="row-content">@user.Email</p>
+                            </td>
+                            <td>
+                                <p class="row-content">@relativeTime</p>
+                            </td>
+                            <td>
+                                <p class="row-content">@user.CreatedDate</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    }
+    else
+    {
+        <h2 class="text-danger">No user found</h2>
+    }
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const $selectAllUsers = $('#select-all-users');
+            const $selectUsers = $('.select-users');
+
+            $selectAllUsers.change(function () {
+                const isChecked = $(this).is(':checked');
+                $selectUsers.prop('checked', isChecked);
+            });
+
+            $selectUsers.change(function () {
+                const allChecked = $selectUsers.length === $selectUsers.filter(':checked').length;
+                $selectAllUsers.prop('checked', allChecked);
+            });
+        });
+    </script>
+}

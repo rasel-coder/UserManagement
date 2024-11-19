@@ -1,0 +1,19 @@
+
+p {
+    margin: 0;
+}
+
+.row-content {
+    font-weight: 500;
+    margin: 0;
+}
+
+.disabled-row td:not(:first-child) {
+    color: #6c757d;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+    .disabled-row td input {
+        pointer-events: auto;
+    }
