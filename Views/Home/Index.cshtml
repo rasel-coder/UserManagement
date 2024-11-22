@@ -73,7 +73,7 @@
                                 <p class="row-content">@user.Email</p>
                             </td>
                             <td>
-                                <p class="row-content">@relativeTime</p>
+                                <p class="row-content"><a class="text-black text-decoration-none" href="#" title="@user.LastLoggedIn">@relativeTime</a></p>
                             </td>
                             <td>
                                 <p class="row-content">@user.CreatedDate</p>
@@ -92,7 +92,9 @@
 
 @section Scripts {
     <script>
+        $(document).tooltip();
         $(document).ready(function () {
+            $(document).tooltip();
             const $selectAllUsers = $('#select-all-users');
             const $selectUsers = $('.select-users');
 
