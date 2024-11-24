@@ -12,11 +12,5 @@ public class IdentityContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
-        //foreach (var foreignKey in builder.Model.GetEntityTypes()
-        //    .SelectMany(x => x.GetForeignKeys()))
-        //{
-        //    foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
-        //}
     }
 }

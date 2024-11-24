@@ -1,10 +1,6 @@
 ﻿@model List<UserManagement.Data.ApplicationUser>
 
 @{
-    ViewData["Title"] = "Home Page";
-}
-
-@{
     if (Model != null)
     {
         <form method="post" action="/Home/UserAction">
@@ -94,7 +90,6 @@
     <script>
         $(document).tooltip();
         $(document).ready(function () {
-            $(document).tooltip();
             const $selectAllUsers = $('#select-all-users');
             const $selectUsers = $('.select-users');
 
